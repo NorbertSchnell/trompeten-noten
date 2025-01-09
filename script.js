@@ -32,7 +32,7 @@ async function displayOrPlay() {
     currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
     displayNote(currentNote.name);
   } else {
-    label.innerHTML = '&rarr; ' + currentNote.label;
+    label.innerHTML = currentNote.label;
     playNote(currentNote.pitch - 2);
     currentNote = null;
   }
