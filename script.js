@@ -2,6 +2,7 @@ const { Factory, EasyScore, System } = Vex.Flow;
 
 const output = document.getElementById('output');
 const label = document.getElementById('label');
+const comment = document.getElementById('comment');
 
 const tristansLowestPitch = 54;
 const tristansHighestPitch = 75;
@@ -11,6 +12,7 @@ let currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
 (async function main() {
   await loadAudioFiles();
 
+  comment.innerHTML = '(klicken oder Leertaste drücken)';
   displayNote(currentNote.name);
 
   window.addEventListener('click', displayOrPlay);
