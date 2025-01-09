@@ -190,6 +190,7 @@ function stopLastNote() {
   if (audioSource !== null && audioGain !== null) {
     const time = audioContext.currentTime;
     audioSource.stop(time + fadeOutDuration);
+    audioGain.gain.setValueAtTime(1, time);
     audioGain.gain.linearRampToValueAtTime(0, time + fadeOutDuration);
   }
 }
