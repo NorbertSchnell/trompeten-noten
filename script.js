@@ -1,13 +1,23 @@
 const { Factory, EasyScore, System } = Vex.Flow;
 
+const comment = document.getElementById('comment');
 const output = document.getElementById('output');
 const label = document.getElementById('label');
-const comment = document.getElementById('comment');
+const fingering = document.getElementById('fingering');
+
+const valves = [];
+valves[0] = document.getElementById('valve-1');
+valves[1] = document.getElementById('valve-2');
+valves[2] = document.getElementById('valve-3');
+
+const lowestTrumpetPitch = 54;
+const highestTrumpetPitch = 83;
 
 const tristansLowestPitch = 54;
 const tristansHighestPitch = 75;
 
-let currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
+// let currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
+let currentNote = getNote(lowestTrumpetPitch);
 
 (async function main() {
   await loadAudioFiles();
@@ -29,13 +39,34 @@ async function displayOrPlay() {
   }
 
   if (currentNote === null) {
-    label.innerHTML = '';
+    label.classList.add('hidden');
+    fingering.classList.add('hidden');
+
     stopLastNote();
-    currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
+  
+    // currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
+    currentNote = getNextNote();
     displayNote(currentNote.name);
   } else {
+    // display label and fingering
     label.innerHTML = currentNote.label;
+    label.classList.remove('hidden');
+
+    for (let i = 0; i < 3; i++) {
+      const finger = currentNote.fingering[i];
+      const valve = valves[i];
+
+      if (finger) {
+        valve.classList.add('pressed');
+      } else {
+        valve.classList.remove('pressed');
+      }
+    }
+
+    fingering.classList.remove('hidden');
+
     playNote(currentNote.pitch - 2);
+
     currentNote = null;
   }
 }
@@ -46,10 +77,24 @@ async function displayOrPlay() {
 function getRandomNote(lowestPitch, highestPitch) {
   const pitch = lowestPitch + Math.floor((highestPitch - lowestPitch + 1) * Math.random());
   const sharp = (Math.random() >= 0.5);
+  const note = getNote(pitch, sharp);
+
+  return note;
+}
+
+let nextPitch = lowestTrumpetPitch;
+
+function getNextNote() {
+  const note = getNote(++nextPitch);
+  return note;
+}
+
+function getNote(pitch, sharp = true) {
   const name = getNoteName(pitch, sharp);
   const label = getNoteLabel(pitch, sharp);
+  const fingering = getFingering(pitch);
 
-  return { pitch, sharp, name, label };
+  return { pitch, sharp, name, label, fingering };
 }
 
 function getNoteName(pitch, sharp = true) {
@@ -67,8 +112,8 @@ function getNoteName(pitch, sharp = true) {
     ['A#', 'Bb'],
     'B',
   ];
-  
-    const octave = Math.floor(pitch / 12) - 1;
+
+  const octave = Math.floor(pitch / 12) - 1;
   const pitchClass = pitch % 12;
   let noteName = noteNames[pitchClass];
 
@@ -85,20 +130,22 @@ function getNoteName(pitch, sharp = true) {
 
 function getNoteLabel(pitch, sharp = true) {
   const noteLabels = [
-    'C',
-    ['Cis', 'Des'],
-    'D',
-    ['Dis', 'Es'],
-    'E',
-    'F',
-    ['Fis', 'Ges'],
-    'G',
-    ['Gis', 'As'],
-    'A',
-    ['Ais', 'B'],
-    'H',
+    'c',
+    ['cis', 'des'],
+    'd',
+    ['dis', 'es'],
+    'e',
+    'f',
+    ['fis', 'ges'],
+    'g',
+    ['gis', 'as'],
+    'a',
+    ['ais', 'b'],
+    'h',
   ];
 
+  const octave = Math.floor(pitch / 12) - 1;
+  const numQuotes = Math.max(0, octave - 3);
   const pitchClass = pitch % 12;
   let noteLabel = noteLabels[pitchClass];
 
@@ -108,6 +155,10 @@ function getNoteLabel(pitch, sharp = true) {
     } else {
       noteLabel = noteLabel[1];
     }
+  }
+
+  for (let i = 0; i < numQuotes; i++) {
+    noteLabel += "'";
   }
 
   return noteLabel;
@@ -128,6 +179,47 @@ function displayNote(noteName) {
   stave.draw();
   system.format();
   voice.draw();
+}
+
+
+/************************************************************
+ * Fingering
+ */
+function getFingering(pitch) {
+  const fingerings = [
+    [true, true, true],
+    [true, false, true],
+    [false, true, true],
+    [true, true, false],
+    [true, false, false],
+    [false, true, false],
+    [false, false, false],
+    [true, true, true],
+    [true, false, true],
+    [false, true, true],
+    [true, true, false],
+    [true, false, false],
+    [false, true, false],
+    [false, false, false],
+    [false, true, true],
+    [true, true, false],
+    [true, false, false],
+    [false, true, false],
+    [false, false, false],
+    [true, true, false],
+    [true, false, false],
+    [false, true, false],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ];
+
+  return fingerings[pitch - lowestTrumpetPitch];
 }
 
 /************************************************************
