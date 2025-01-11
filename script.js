@@ -16,8 +16,8 @@ const highestTrumpetPitch = 83;
 const tristansLowestPitch = 54;
 const tristansHighestPitch = 75;
 
-// let currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
-let currentNote = getNote(lowestTrumpetPitch);
+let currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
+// let currentNote = getNote(lowestTrumpetPitch);
 
 (async function main() {
   await loadAudioFiles();
@@ -44,8 +44,8 @@ async function displayOrPlay() {
 
     stopLastNote();
   
-    // currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
-    currentNote = getNextNote();
+    currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
+    // currentNote = getNextNote();
     displayNote(currentNote.name);
   } else {
     // display label and fingering
