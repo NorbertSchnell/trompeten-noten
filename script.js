@@ -236,19 +236,19 @@ let audioGain = null;
 
 async function loadAudioFiles() {
   const audioFileNames = [
-    'C3v12.ogg',
-    'D#3v12.ogg',
-    'F#3v12.ogg',
-    'A3v12.ogg',
-    'C4v12.ogg',
-    'D#4v12.ogg',
-    'F#4v12.ogg',
-    'A4v12.ogg',
-    'C5v12.ogg',
-    'D#5v12.ogg',
-    'F#5v12.ogg',
-    'A5v12.ogg',
-    'C6v12.ogg',
+    'C3v12.flac',
+    'D#3v12.flac',
+    'F#3v12.flac',
+    'A3v12.flac',
+    'C4v12.flac',
+    'D#4v12.flac',
+    'F#4v12.flac',
+    'A4v12.flac',
+    'C5v12.flac',
+    'D#5v12.flac',
+    'F#5v12.flac',
+    'A5v12.flac',
+    'C6v12.flac',
   ];
 
   for (let i = 0; i < audioFileNames.length; i++) {
