@@ -38,7 +38,7 @@ p {
   position: absolute;
   left: 10px;
   bottom: 0;
-  width: 100px;
+  width: 120px;
   height: 22px;
   border-style: solid;
   border-width: 1px;
@@ -66,11 +66,11 @@ p {
 }
 
 #valve-2 {
-  left: 45px;
+  left: 55px;
 }
 
 #valve-3 {
-  left: 80px;
+  left: 90px;
 }
 
 .hidden {
