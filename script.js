@@ -26,6 +26,14 @@ let currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
   displayNote(currentNote.name);
 
   window.addEventListener('click', displayOrPlay);
+
+  window.addEventListener('touchstart', (e) => {
+    displayOrPlay()
+    e.preventDefault();
+  });
+
+  window.addEventListener('touchend', (e) => e.preventDefault());
+
   window.addEventListener("keypress", (e) => {
     if (e.code === 'Space') {
       displayOrPlay()
@@ -43,7 +51,7 @@ async function displayOrPlay() {
     fingering.classList.add('hidden');
 
     stopLastNote();
-  
+
     currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
     // currentNote = getNextNote();
     displayNote(currentNote.name);
