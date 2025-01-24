@@ -19,7 +19,7 @@ let currentNote = getRandomNote(lowestTrumpetPitch, highestTrumpetPitch);
 (async function main() {
   await loadAudioFiles();
 
-  comment.innerHTML = '(klick, tap oder Leertaste)';
+  comment.innerHTML = '(Klick, Tap oder Leertaste)';
   displayNote(currentNote.name);
 
   window.addEventListener("pointerup", displayOrPlay);
