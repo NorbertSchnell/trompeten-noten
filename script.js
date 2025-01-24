@@ -13,46 +13,26 @@ valves[2] = document.getElementById('valve-3');
 const lowestTrumpetPitch = 54;
 const highestTrumpetPitch = 83;
 
-const tristansLowestPitch = 54;
-const tristansHighestPitch = 75;
-
-let currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
+let currentNote = getRandomNote(lowestTrumpetPitch, highestTrumpetPitch);
 // let currentNote = getNote(lowestTrumpetPitch);
 
 (async function main() {
   await loadAudioFiles();
 
-  comment.innerHTML = '(klicken oder Leertaste drücken)';
+  comment.innerHTML = '(klick, tap oder Leertaste)';
   displayNote(currentNote.name);
 
-  window.addEventListener('click', displayOrPlay);
-
-  window.addEventListener('touchstart', (e) => {
-    displayOrPlay()
-    e.preventDefault();
-  });
-
-  window.addEventListener('touchend', (e) => e.preventDefault());
-
-  window.addEventListener("keypress", (e) => {
-    if (e.code === 'Space') {
-      displayOrPlay()
-    }
-  });
+  window.addEventListener("pointerup", displayOrPlay);
 })();
 
 async function displayOrPlay() {
-  if (audioContext.state !== 'running') {
-    await audioContext.resume();
-  }
-
   if (currentNote === null) {
     label.classList.add('hidden');
     fingering.classList.add('hidden');
 
     stopLastNote();
 
-    currentNote = getRandomNote(tristansLowestPitch, tristansHighestPitch);
+    currentNote = getRandomNote(lowestTrumpetPitch, highestTrumpetPitch);
     // currentNote = getNextNote();
     displayNote(currentNote.name);
   } else {
@@ -73,6 +53,7 @@ async function displayOrPlay() {
 
     fingering.classList.remove('hidden');
 
+    await resumeAudio();
     playNote(currentNote.pitch - 2);
 
     currentNote = null;
@@ -172,21 +153,23 @@ function getNoteLabel(pitch, sharp = true) {
   return noteLabel;
 }
 
-function displayNote(noteName) {
+function displayNote(noteName = 'c0') {
   output.innerHTML = '';
   const factory = new Factory({ renderer: { elementId: 'output', width: 200, height: 150 } });
   const score = factory.EasyScore();
   const system = factory.System();
-
   const voice = score.voice(score.notes(`${noteName}/1`));
   const stave = system.addStave({ voices: [voice] });
 
   stave.addClef('treble');
   stave.setWidth(120);
-
   stave.draw();
+
   system.format();
-  voice.draw();
+
+  if (noteName !== 'c0') {
+    voice.draw();
+  }
 }
 
 
@@ -241,6 +224,12 @@ const sampleInterval = 3;
 
 let audioSource = null;
 let audioGain = null;
+
+async function resumeAudio() {
+  if (audioContext.state !== 'running') {
+    await audioContext.resume();
+  }
+}
 
 async function loadAudioFiles() {
   const audioFileNames = [
