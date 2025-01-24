@@ -23,6 +23,11 @@ let currentNote = getRandomNote(lowestTrumpetPitch, highestTrumpetPitch);
   displayNote(currentNote.name);
 
   window.addEventListener("pointerup", displayOrPlay);
+  window.addEventListener("keypress", (e) => {
+    if (e.code === 'Space') {
+      displayOrPlay()
+    }
+  });
 })();
 
 async function displayOrPlay() {
