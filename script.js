@@ -10,11 +10,26 @@ valves[0] = document.getElementById('valve-1');
 valves[1] = document.getElementById('valve-2');
 valves[2] = document.getElementById('valve-3');
 
-const lowestTrumpetPitch = 54;
-const highestTrumpetPitch = 83;
+let lowestPitch = 54;
+let highestPitch = 83;
 
-let currentNote = getRandomNote(lowestTrumpetPitch, highestTrumpetPitch);
-// let currentNote = getNote(lowestTrumpetPitch);
+let currentNote = getRandomNote(lowestPitch, highestPitch);
+// let currentNote = getNote(lowestPitch);
+
+const searchParams = new URLSearchParams(window.location.search);
+
+for ([key, value] of searchParams) {
+  switch (key) {
+    case 'min':
+      lowestPitch = parseInt(value);
+      break;
+    case 'max':
+      highestPitch = parseInt(value);
+      break;
+    default:
+      break;
+  }
+}
 
 (async function main() {
   await loadAudioFiles();
@@ -37,7 +52,7 @@ async function displayOrPlay() {
 
     stopLastNote();
 
-    currentNote = getRandomNote(lowestTrumpetPitch, highestTrumpetPitch);
+    currentNote = getRandomNote(lowestPitch, highestPitch);
     // currentNote = getNextNote();
     displayNote(currentNote.name);
   } else {
@@ -76,7 +91,7 @@ function getRandomNote(lowestPitch, highestPitch) {
   return note;
 }
 
-let nextPitch = lowestTrumpetPitch;
+let nextPitch = lowestPitch;
 
 function getNextNote() {
   const note = getNote(++nextPitch);
@@ -215,7 +230,7 @@ function getFingering(pitch) {
     [null, null, null],
   ];
 
-  return fingerings[pitch - lowestTrumpetPitch];
+  return fingerings[pitch - lowestPitch];
 }
 
 /************************************************************
