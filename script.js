@@ -18,14 +18,22 @@ const searchParams = new URLSearchParams(window.location.search);
 for ([key, value] of searchParams) {
   switch (key) {
     case 'min':
-      lowestPitch = parseInt(value);
+      const min = parseInt(value);
+      lowestPitch = Math.max(lowestPitch, min);
       break;
     case 'max':
-      highestPitch = parseInt(value);
+      const max = parseInt(value);
+      highestPitch = Math.min(highestPitch, max);
       break;
     default:
       break;
   }
+}
+
+if (lowestPitch > highestPitch) {
+  const lowest = highestPitch;
+  highestPitch = lowestPitch;
+  lowestPitch = lowest;
 }
 
 let currentNote = getRandomNote(lowestPitch, highestPitch);
