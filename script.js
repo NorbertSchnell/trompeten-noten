@@ -13,9 +13,6 @@ valves[2] = document.getElementById('valve-3');
 let lowestPitch = 54;
 let highestPitch = 83;
 
-let currentNote = getRandomNote(lowestPitch, highestPitch);
-// let currentNote = getNote(lowestPitch);
-
 const searchParams = new URLSearchParams(window.location.search);
 
 for ([key, value] of searchParams) {
@@ -30,6 +27,8 @@ for ([key, value] of searchParams) {
       break;
   }
 }
+
+let currentNote = getRandomNote(lowestPitch, highestPitch);
 
 (async function main() {
   await loadAudioFiles();
@@ -53,7 +52,6 @@ async function displayOrPlay() {
     stopLastNote();
 
     currentNote = getRandomNote(lowestPitch, highestPitch);
-    // currentNote = getNextNote();
     displayNote(currentNote.name);
   } else {
     // display label and fingering
